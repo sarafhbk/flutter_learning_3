@@ -4,17 +4,19 @@ import 'package:provider/provider.dart';
 import '../widgets/product_item.dart';
 
 class ProductGrid extends StatelessWidget {
-  const ProductGrid({Key? key}) : super(key: key);
+  final bool showOnlyFavs;
+  const ProductGrid({Key? key, required this.showOnlyFavs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
-    final products = productData.items;
+    final products =
+        showOnlyFavs ? productData.favouriteItems : productData.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemBuilder: (ctx, i) {
-        return ChangeNotifierProvider(
-          create: (c) => products[i],
+        return ChangeNotifierProvider.value(
+          value: products[i],
           child: const ProductItem(),
         );
       },
